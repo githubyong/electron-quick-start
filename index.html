@@ -6,6 +6,7 @@
   </head>
   <body>
     <h1>Hello World!</h1>
+    <input class="button-primary" value="Ping" id="Ping" type="button">
     <!-- All of the Node.js APIs are available in this renderer process. -->
     We are using Node.js <script>document.write(process.versions.node)</script>,
     Chromium <script>document.write(process.versions.chrome)</script>,
@@ -13,7 +14,20 @@
 
     <script>
       // You can also require other files to run in this process
-      require('./renderer.js')
+      require('./renderer.js');
+
+      const {ipcRenderer} = require('electron');
+
+      document.getElementById("Ping").addEventListener('click', () => {
+          ipcRenderer.send("asynchronous-message","ping?="+new Date().getTime())
+      });
+
+
+      ipcRenderer.on('asynchronous-reply', (event, arg) => {
+          console.log(arg) // prints "pong"
+          console.log("event=",event);
+      })
+
     </script>
   </body>
 </html>
